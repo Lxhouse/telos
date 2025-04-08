@@ -23,14 +23,32 @@ const AppLayout: React.FC = () => {
   };
   
   return (
-    <div className="max-w-md mx-auto bg-gray-50 min-h-screen flex flex-col">
+    <div className="max-w-md mx-auto bg-gray-50 min-h-screen flex flex-col relative">
       {/* 顶部导航栏 */}
       <header className="bg-[#58CC02] text-white p-4 shadow-md">
         <h1 className="text-2xl font-bold text-center">Telos</h1>
       </header>
       
+      {/* TodoList视图切换 */}
+      <div className="bg-white p-2 shadow-sm">
+        <div className="max-w-md mx-auto flex">
+          <button
+            className={`flex-1 py-2 rounded-md transition-colors ${state.currentView === 'day' ? 'bg-[#58CC02] text-white' : 'text-gray-700'}`}
+            onClick={() => handleViewChange('day')}
+          >
+            日视图
+          </button>
+          <button
+            className={`flex-1 py-2 rounded-md transition-colors ${state.currentView === 'week' ? 'bg-[#58CC02] text-white' : 'text-gray-700'}`}
+            onClick={() => handleViewChange('week')}
+          >
+            周视图
+          </button>
+        </div>
+      </div>
+      
       {/* 主内容区域 */}
-      <main className="flex-grow">
+      <main className="flex-grow overflow-y-auto pb-20 h-[calc(100vh-12rem)]">
         <AnimatePresence mode="wait">
           {activeTab === 'todo' ? (
             <motion.div
@@ -40,21 +58,6 @@ const AppLayout: React.FC = () => {
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
             >
-              {/* TodoList视图切换 */}
-              <div className="flex bg-white p-2 mb-4 shadow-sm">
-                <button
-                  className={`flex-1 py-2 rounded-md transition-colors ${state.currentView === 'day' ? 'bg-[#58CC02] text-white' : 'text-gray-700'}`}
-                  onClick={() => handleViewChange('day')}
-                >
-                  日视图
-                </button>
-                <button
-                  className={`flex-1 py-2 rounded-md transition-colors ${state.currentView === 'week' ? 'bg-[#58CC02] text-white' : 'text-gray-700'}`}
-                  onClick={() => handleViewChange('week')}
-                >
-                  周视图
-                </button>
-              </div>
               
               {/* 当前视图内容 */}
               <AnimatePresence mode="wait">
@@ -96,7 +99,7 @@ const AppLayout: React.FC = () => {
       </main>
       
       {/* 底部导航栏 */}
-      <footer className="bg-white shadow-md p-2">
+      <footer className="bg-white shadow-md p-2 fixed bottom-0 left-0 right-0 max-w-md mx-auto">
         <div className="flex justify-around">
           <button
             className={`flex flex-col items-center p-2 rounded-md ${activeTab === 'todo' ? 'text-[#58CC02]' : 'text-gray-500'}`}

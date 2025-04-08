@@ -27,23 +27,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* 自定义滚动条 */
-::-webkit-scrollbar {
-  width: 8px;
-}
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--duolingo-green);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--duolingo-green-dark);
-}
 
 /* 任务完成动画 */
 @keyframes checkmark {
