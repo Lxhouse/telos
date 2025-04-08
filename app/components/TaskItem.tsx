@@ -29,14 +29,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
 
   return (
     <motion.div
-      className="flex items-center p-3 mb-2 bg-white rounded-lg shadow-sm"
+      className="flex items-center p-4 mb-3 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       layout
     >
       <motion.button
-        className={`flex-shrink-0 w-6 h-6 mr-3 rounded-full border-2 flex items-center justify-center ${task.completed ? 'bg-[#58CC02] border-[#58CC02]' : 'border-gray-300'}`}
+        className={`flex-shrink-0 w-6 h-6 mr-4 rounded-full border-2 flex items-center justify-center ${task.completed ? 'bg-[#58CC02] border-[#58CC02]' : 'border-gray-300 hover:border-[#58CC02] hover:bg-[#58CC02]/10'}`}
         onClick={handleToggle}
         whileTap={{ scale: 0.9 }}
       >
@@ -60,19 +60,19 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
       </motion.button>
       <div className="flex-grow">
         <div className="flex items-center justify-between">
-          <span className={`text-sm ${task.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+          <span className={`text-base font-medium ${task.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
             {task.title}
           </span>
           {task.startTime && (
-            <span className="text-xs text-gray-500 ml-2">{task.startTime}</span>
+            <span className="text-sm text-gray-500 ml-2 font-medium">{task.startTime}</span>
           )}
         </div>
         {task.details && (
-          <p className="text-xs text-gray-500 mt-1">{task.details}</p>
+          <p className="text-sm text-gray-600 mt-2 leading-relaxed">{task.details}</p>
         )}
       </div>
       <motion.button
-        className="ml-3 text-gray-400 hover:text-red-500 transition-colors"
+        className="ml-4 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
         onClick={async () => {
           setIsDeleting(true);
           await deleteTask(task.id);

@@ -10,6 +10,9 @@ import { useAppContext } from '../context/AppContext';
 const DayView: React.FC = () => {
   const { state, addTask, updateTasksOrder } = useAppContext();
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [newTaskTime, setNewTaskTime] = useState('');
+  const [newTaskDetails, setNewTaskDetails] = useState('');
+  const [showAddForm, setShowAddForm] = useState(false);
   const [contextId] = useState('tasks-context'); // Add stable context ID
   
   // 格式化当前选中日期
@@ -24,8 +27,10 @@ const DayView: React.FC = () => {
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (newTaskTitle.trim()) {
-      addTask(newTaskTitle.trim(), state.selectedDate);
+      addTask(newTaskTitle.trim(), state.selectedDate, undefined, newTaskTime, newTaskDetails);
       setNewTaskTitle('');
+      setNewTaskTime('');
+      setNewTaskDetails('');
     }
   };
   
@@ -57,31 +62,88 @@ const DayView: React.FC = () => {
         {formattedDate}
       </motion.h2>
       
-      {/* 添加任务表单 */}
-      <motion.form 
-        className="mb-6"
-        onSubmit={handleAddTask}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+      {/* 添加任务按钮 */}
+      <motion.button
+        className="fixed bottom-6 right-6 w-14 h-14 bg-[#58CC02] text-white rounded-full shadow-lg hover:bg-[#46a302] transition-colors flex items-center justify-center z-10"
+        onClick={() => setShowAddForm(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <div className="flex rounded-lg overflow-hidden shadow-sm">
-          <input
-            type="text"
-            value={newTaskTitle}
-            onChange={(e) => setNewTaskTitle(e.target.value)}
-            placeholder="添加新任务..."
-            className="flex-grow p-3 outline-none text-sm"
-          />
-          <button
-            type="submit"
-            className="bg-[#58CC02] text-white px-4 py-2 font-medium text-sm hover:bg-[#46a302] transition-colors"
-            disabled={!newTaskTitle.trim()}
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+        </svg>
+      </motion.button>
+
+      {/* 添加任务表单 */}
+      <AnimatePresence>
+        {showAddForm && (
+          <motion.div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setShowAddForm(false);
+              }
+            }}
           >
-            添加
-          </button>
-        </div>
-      </motion.form>
+            <motion.form 
+              className="w-full max-w-lg mx-4"
+              onSubmit={(e) => {
+                handleAddTask(e);
+                setShowAddForm(false);
+              }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="space-y-3 bg-white p-6 rounded-xl shadow-xl">
+                <input
+                  type="text"
+                  value={newTaskTitle}
+                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                  placeholder="添加新任务..."
+                  className="w-full p-3 border rounded-lg outline-none text-sm"
+                  autoFocus
+                />
+                <div className="flex gap-3">
+                  <input
+                    type="time"
+                    value={newTaskTime}
+                    onChange={(e) => setNewTaskTime(e.target.value)}
+                    className="p-3 border rounded-lg outline-none text-sm"
+                  />
+                  <textarea
+                    value={newTaskDetails}
+                    onChange={(e) => setNewTaskDetails(e.target.value)}
+                    placeholder="任务详情（可选）"
+                    className="flex-grow p-3 border rounded-lg outline-none text-sm resize-none"
+                    rows={2}
+                  />
+                </div>
+                <div className="flex justify-end gap-3">
+                  <button
+                    type="button"
+                    className="px-6 py-2 rounded-lg font-medium text-sm text-gray-600 hover:bg-gray-100 transition-colors"
+                    onClick={() => setShowAddForm(false)}
+                  >
+                    取消
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-[#58CC02] text-white px-6 py-2 rounded-lg font-medium text-sm hover:bg-[#46a302] transition-colors"
+                    disabled={!newTaskTitle.trim()}
+                  >
+                    添加
+                  </button>
+                </div>
+              </div>
+            </motion.form>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* 任务列表 */}
       <DragDropContext onDragEnd={handleDragEnd}>
