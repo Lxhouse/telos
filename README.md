@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Telos - 任务与目标管理应用
 
-## Getting Started
+## 项目简介
+Telos是一个简洁高效的任务和目标管理应用，帮助用户更好地规划和追踪日常任务与长期目标。应用采用了现代化的界面设计和流畅的交互体验，让任务管理变得轻松愉快。
 
-First, run the development server:
+## 功能特点
+- 📅 日/周视图切换：灵活查看和管理不同时间维度的任务
+- 🎯 目标追踪：设置并追踪长期目标的完成进度
+- ✨ 任务关联：将日常任务与长期目标关联，形成清晰的目标达成路径
+- 🔄 拖拽排序：直观地调整任务优先级
+- 💫 流畅动画：提供流畅的过渡动画，增强用户体验
 
+## 技术栈
+- **前端框架**：Next.js 14 (React)
+- **样式方案**：Tailwind CSS
+- **状态管理**：React Context
+- **动画效果**：Framer Motion
+- **字体**：Geist Font Family
+- **类型系统**：TypeScript
+
+## 本地开发
+1. 克隆项目
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd telos
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. 安装依赖
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. 启动开发服务器
+```bash
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. 在浏览器中访问 `http://localhost:3000`
 
-## Learn More
+## 使用说明
+1. **任务管理**
+   - 在日视图或周视图中添加新任务
+   - 通过拖拽调整任务顺序
+   - 点击完成按钮标记任务状态
 
-To learn more about Next.js, take a look at the following resources:
+2. **目标追踪**
+   - 在目标页面创建新的目标
+   - 设置目标的完成次数要求和截止日期
+   - 将日常任务与目标关联
+   - 通过目标卡片查看进度
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 项目特色
+- 采用多邻国风格的绿色主题，给人积极向上的视觉体验
+- 支持任务的灵活管理和目标的系统追踪
+- 简洁直观的界面设计，降低使用门槛
+- 流畅的动画效果，提升交互体验
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 贡献指南
+欢迎提交Issue和Pull Request来帮助改进项目。在提交PR之前，请确保：
+1. 代码符合项目的代码规范
+2. 新功能有适当的测试覆盖
+3. 所有测试都能通过
+4. 更新相关文档
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 开源协议
+MIT License
