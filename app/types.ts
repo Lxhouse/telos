@@ -15,7 +15,7 @@ export interface Task {
 // 目标类型
 export enum GoalType {
   CHECKIN = 'checkin',
-  CUSTOM = 'custom'
+  COUNTDOWN = 'countdown'
 }
 
 export interface Goal {

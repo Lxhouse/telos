@@ -62,106 +62,6 @@ const GoalTracker: React.FC = () => {
         目标追踪
       </motion.h2>
       
-      {/* 添加目标表单 */}
-      <AnimatePresence>
-        {showForm && (
-          <motion.form
-            className="bg-white rounded-lg shadow-sm p-4 mb-6"
-            onSubmit={handleAddGoal}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                目标名称
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={newGoal.title}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
-                placeholder="输入你的目标"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                目标类型
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  className={`p-3 rounded-lg border ${newGoal.type === GoalType.CHECKIN ? 'border-[#58CC02] bg-[#58CC02]/10 text-[#58CC02]' : 'border-gray-200 hover:border-gray-300'} transition-colors`}
-                  onClick={() => setNewGoal(prev => ({ ...prev, type: GoalType.CHECKIN }))}
-                >
-                  <div className="font-medium">打卡式</div>
-                  <div className="text-sm text-gray-500">记录每次完成情况</div>
-                </button>
-                <button
-                  type="button"
-                  className={`p-3 rounded-lg border ${newGoal.type === GoalType.COUNTDOWN ? 'border-[#FF4B4B] bg-[#FF4B4B]/10 text-[#FF4B4B]' : 'border-gray-200 hover:border-gray-300'} transition-colors`}
-                  onClick={() => setNewGoal(prev => ({ ...prev, type: GoalType.COUNTDOWN }))}
-                >
-                  <div className="font-medium">倒计时</div>
-                  <div className="text-sm text-gray-500">设定截止时间</div>
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {newGoal.type === GoalType.CHECKIN ? '目标次数' : '完成次数'}
-              </label>
-              <input
-                type="number"
-                name="targetCount"
-                value={newGoal.targetCount}
-                onChange={handleInputChange}
-                min="1"
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
-                required
-              />
-            </div>
-            
-            {newGoal.type === GoalType.COUNTDOWN && (
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  截止日期
-                </label>
-                <input
-                  type="date"
-                  name="deadline"
-                  value={newGoal.deadline}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
-                  required
-                />
-              </div>
-            )}
-            
-            <div className="flex space-x-2">
-              <button
-                type="submit"
-                className="flex-1 bg-[#58CC02] text-white py-2 rounded-md font-medium hover:bg-[#46a302] transition-colors"
-              >
-                保存
-              </button>
-              <button
-                type="button"
-                className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-md font-medium hover:bg-gray-300 transition-colors"
-                onClick={() => setShowForm(false)}
-              >
-                取消
-              </button>
-            </div>
-          </motion.form>
-        )}
-      </AnimatePresence>
-      
       {/* 目标列表 */}
       <div className="space-y-4">
         <AnimatePresence>
@@ -191,7 +91,109 @@ const GoalTracker: React.FC = () => {
           )}
         </AnimatePresence>
 
-        {/* 添加目标按钮（移到列表底部） */}
+        {/* 添加目标表单 */}
+        <AnimatePresence>
+          {showForm && (
+            <motion.form
+              className="bg-white rounded-lg shadow-sm p-4"
+              onSubmit={handleAddGoal}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  目标名称
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={newGoal.title}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
+                  placeholder="输入你的目标"
+                  required
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  目标类型
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    className={`p-3 rounded-lg border ${newGoal.type === GoalType.CHECKIN ? 'border-[#58CC02] bg-[#58CC02]/10 text-[#58CC02]' : 'border-gray-200 hover:border-gray-300'} transition-colors`}
+                    onClick={() => setNewGoal(prev => ({ ...prev, type: GoalType.CHECKIN }))}
+                  >
+                    <div className="font-medium">打卡式</div>
+                    <div className="text-sm text-gray-500">记录每次完成情况</div>
+                  </button>
+                  <button
+                    type="button"
+                    className={`p-3 rounded-lg border ${newGoal.type === GoalType.COUNTDOWN ? 'border-[#FF4B4B] bg-[#FF4B4B]/10 text-[#FF4B4B]' : 'border-gray-200 hover:border-gray-300'} transition-colors`}
+                    onClick={() => setNewGoal(prev => ({ ...prev, type: GoalType.COUNTDOWN }))}
+                  >
+                    <div className="font-medium">倒计时</div>
+                    <div className="text-sm text-gray-500">设定截止时间</div>
+                  </button>
+                </div>
+              </div>
+
+              {newGoal.type === GoalType.CHECKIN && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    目标次数
+                  </label>
+                  <input
+                    type="number"
+                    name="targetCount"
+                    value={newGoal.targetCount}
+                    onChange={handleInputChange}
+                    min="1"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
+                    required
+                  />
+                </div>
+              )}
+              
+              {newGoal.type === GoalType.COUNTDOWN && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    截止日期
+                  </label>
+                  <input
+                    type="date"
+                    name="deadline"
+                    value={newGoal.deadline}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
+                    required
+                  />
+                </div>
+              )}
+              
+              <div className="flex space-x-2">
+                <button
+                  type="submit"
+                  className="flex-1 bg-[#58CC02] text-white py-2 rounded-md font-medium hover:bg-[#46a302] transition-colors"
+                >
+                  保存
+                </button>
+                <button
+                  type="button"
+                  className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-md font-medium hover:bg-gray-300 transition-colors"
+                  onClick={() => setShowForm(false)}
+                >
+                  取消
+                </button>
+              </div>
+            </motion.form>
+          )}
+        </AnimatePresence>
+
+        {/* 添加目标按钮 */}
         {!showForm && (
           <motion.button
             className="w-full bg-[#58CC02] text-white py-3 rounded-lg font-medium shadow-sm hover:bg-[#46a302] transition-colors"

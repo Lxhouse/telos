@@ -21,22 +21,13 @@ const CountdownGoalCard: React.FC<CountdownGoalCardProps> = ({ goal }) => {
     const deadlineDate = new Date(goal.deadline);
     const daysLeft = differenceInDays(deadlineDate, today);
     
-    return daysLeft > 0 ? daysLeft : 0;
+    return daysLeft;
   };
   
   const remainingDays = getRemainingDays();
-  const isExpired = remainingDays === 0;
-  const progressPercentage = (goal.currentCount / goal.targetCount) * 100;
-  const isCompleted = progressPercentage >= 100;
+  const isExpired = remainingDays === 0; // 只在目标当天显示结束状态
+  const isCompleted = false;
 
-  // 处理打卡
-  const handleCheckin = async () => {
-    try {
-      await incrementGoalCount(goal.id);
-    } catch (error) {
-      console.error('打卡失败:', error);
-    }
-  };
 
   return (
     <motion.div 
@@ -61,39 +52,7 @@ const CountdownGoalCard: React.FC<CountdownGoalCardProps> = ({ goal }) => {
         <span className="truncate block">{goal.title}</span>
       </h3>
 
-      {/* 进度显示 */}
-      <div className="relative mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-600">
-            完成进度 {goal.currentCount} / {goal.targetCount}
-          </span>
-          <span className="text-sm font-medium" style={{ color: isCompleted ? '#58CC02' : '#FF4B4B' }}>
-            {progressPercentage.toFixed(0)}%
-          </span>
-        </div>
-        <div className="overflow-hidden h-2 rounded-full bg-gray-100">
-          <motion.div 
-            className="h-full rounded-full"
-            style={{ backgroundColor: isCompleted ? '#58CC02' : '#FF4B4B' }}
-            initial={{ width: 0 }}
-            animate={{ width: `${progressPercentage}%` }}
-            transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
-          />
-        </div>
-      </div>
-
-      {/* 打卡按钮 */}
-      {!isCompleted && !isExpired && (
-        <button
-          onClick={handleCheckin}
-          className="w-full bg-[#FF4B4B] text-white py-2 rounded-lg font-medium hover:bg-[#ff3333] transition-colors flex items-center justify-center gap-2 mt-4"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-          </svg>
-          打卡
-        </button>
-      )}
+      {/* 倒计时目标不需要进度显示和打卡按钮 */}
     </motion.div>
   );
 };
