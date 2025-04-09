@@ -13,13 +13,20 @@ export interface Task {
 }
 
 // 目标类型
+export enum GoalType {
+  CHECKIN = 'checkin',
+  CUSTOM = 'custom'
+}
+
 export interface Goal {
   id: string;
-  title: string;
+  title: string; // 目标标题（字符串形式）
+  type: GoalType;
   targetCount: number; // 目标完成次数
   currentCount: number; // 当前完成次数
   deadline?: string; // 截止日期（可选）
   color: string; // 目标卡片颜色
+  lastUpdate?: string; // 最后更新时间
 }
 
 // 视图类型

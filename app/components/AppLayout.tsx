@@ -49,7 +49,7 @@ const AppLayout: React.FC = () => {
       </header>
       
       {/* TodoList视图切换 */}
-      {activeTab !== 'nav' && (
+      {activeTab === 'todo' && (
         <div className="bg-white p-2 shadow-sm">
           <div className="max-w-md mx-auto flex">
             <button

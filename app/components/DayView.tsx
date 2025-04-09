@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import TaskItem from './TaskItem';
 import { useAppContext } from '../context/AppContext';
 
@@ -14,7 +14,7 @@ const DayView: React.FC = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   
   // 格式化当前选中日期
-  const formattedDate = format(new Date(state.selectedDate), 'yyyy年MM月dd日');
+  const formattedDate = format(parseISO(state.selectedDate), 'yyyy年MM月dd日', { weekStartsOn: 1 });
   
   // 获取当天的任务
   const tasksForDay = state.tasks

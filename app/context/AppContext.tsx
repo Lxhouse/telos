@@ -14,7 +14,7 @@ interface AppContextType {
   deleteTask: (id: string) => Promise<void>;
   toggleTaskCompletion: (id: string) => Promise<void>;
   updateTasksOrder: (tasks: Task[]) => Promise<void>;
-  addGoal: (title: string, targetCount: number, deadline?: string, color?: string) => Promise<void>;
+  addGoal: (goalData: Omit<Goal, 'id'>) => Promise<void>;
   updateGoal: (goal: Goal) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
   incrementGoalCount: (id: string) => Promise<void>;
@@ -169,15 +169,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // 添加目标
-  const addGoal = async (title: string, targetCount: number, deadline?: string, color: string = DUOLINGO_GREEN) => {
+  const addGoal = async (goalData: Omit<Goal, 'id'>) => {
     try {
       const newGoal: Goal = {
         id: uuidv4(),
-        title,
-        targetCount,
-        currentCount: 0,
-        deadline,
-        color,
+        ...goalData
       };
       
       await db.addGoal(newGoal);

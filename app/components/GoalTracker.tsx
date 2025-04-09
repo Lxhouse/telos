@@ -4,15 +4,17 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GoalCard from './GoalCard';
 import { useAppContext } from '../context/AppContext';
+import { GoalType } from '../types';
+import CountdownGoalCard from './CountdownGoalCard';
 
 const GoalTracker: React.FC = () => {
   const { state, addGoal } = useAppContext();
   const [showForm, setShowForm] = useState(false);
   const [newGoal, setNewGoal] = useState({
     title: '',
+    type: GoalType.CHECKIN,
     targetCount: 1,
-    deadline: '',
-    color: '#58CC02' // 多邻国绿色作为默认颜色
+    deadline: ''
   });
   
   // 处理表单输入变化
@@ -28,32 +30,26 @@ const GoalTracker: React.FC = () => {
   const handleAddGoal = (e: React.FormEvent) => {
     e.preventDefault();
     if (newGoal.title.trim()) {
-      addGoal(
-        newGoal.title.trim(),
-        newGoal.targetCount,
-        newGoal.deadline || undefined,
-        newGoal.color
-      );
+      addGoal({
+        title: newGoal.title.trim(),
+        type: newGoal.type,
+        targetCount: newGoal.targetCount,
+        currentCount: 0,
+        deadline: newGoal.deadline || undefined,
+        color: newGoal.type === GoalType.CHECKIN ? '#58CC02' : '#FF4B4B',
+        lastUpdate: new Date().toISOString()
+      });
       // 重置表单
       setNewGoal({
         title: '',
+        type: 'checkin' as GoalType,
         targetCount: 1,
         deadline: '',
-        color: '#58CC02'
+
       });
       setShowForm(false);
     }
   };
-  
-  // 可选的颜色列表
-  const colorOptions = [
-    '#58CC02', // 多邻国绿色
-    '#FF4B4B', // 红色
-    '#1CB0F6', // 蓝色
-    '#FFDE59', // 黄色
-    '#FF9600', // 橙色
-    '#8549BA'  // 紫色
-  ];
   
   return (
     <div className="p-4">
@@ -65,20 +61,6 @@ const GoalTracker: React.FC = () => {
       >
         目标追踪
       </motion.h2>
-      
-      {/* 添加目标按钮 */}
-      {!showForm && (
-        <motion.button
-          className="w-full bg-[#58CC02] text-white py-3 rounded-lg font-medium mb-6 shadow-sm hover:bg-[#46a302] transition-colors"
-          onClick={() => setShowForm(true)}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          添加新目标
-        </motion.button>
-      )}
       
       {/* 添加目标表单 */}
       <AnimatePresence>
@@ -101,14 +83,38 @@ const GoalTracker: React.FC = () => {
                 value={newGoal.title}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
-                placeholder="例如：每周跑步3次"
+                placeholder="输入你的目标"
                 required
               />
             </div>
-            
+
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                目标次数
+                目标类型
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  className={`p-3 rounded-lg border ${newGoal.type === GoalType.CHECKIN ? 'border-[#58CC02] bg-[#58CC02]/10 text-[#58CC02]' : 'border-gray-200 hover:border-gray-300'} transition-colors`}
+                  onClick={() => setNewGoal(prev => ({ ...prev, type: GoalType.CHECKIN }))}
+                >
+                  <div className="font-medium">打卡式</div>
+                  <div className="text-sm text-gray-500">记录每次完成情况</div>
+                </button>
+                <button
+                  type="button"
+                  className={`p-3 rounded-lg border ${newGoal.type === GoalType.COUNTDOWN ? 'border-[#FF4B4B] bg-[#FF4B4B]/10 text-[#FF4B4B]' : 'border-gray-200 hover:border-gray-300'} transition-colors`}
+                  onClick={() => setNewGoal(prev => ({ ...prev, type: GoalType.COUNTDOWN }))}
+                >
+                  <div className="font-medium">倒计时</div>
+                  <div className="text-sm text-gray-500">设定截止时间</div>
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {newGoal.type === GoalType.CHECKIN ? '目标次数' : '完成次数'}
               </label>
               <input
                 type="number"
@@ -121,35 +127,21 @@ const GoalTracker: React.FC = () => {
               />
             </div>
             
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                截止日期（可选）
-              </label>
-              <input
-                type="date"
-                name="deadline"
-                value={newGoal.deadline}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
-              />
-            </div>
-            
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                颜色
-              </label>
-              <div className="flex space-x-2">
-                {colorOptions.map(color => (
-                  <button
-                    key={color}
-                    type="button"
-                    className={`w-8 h-8 rounded-full ${newGoal.color === color ? 'ring-2 ring-offset-2 ring-gray-400' : ''}`}
-                    style={{ backgroundColor: color }}
-                    onClick={() => setNewGoal(prev => ({ ...prev, color }))}
-                  />
-                ))}
+            {newGoal.type === GoalType.COUNTDOWN && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  截止日期
+                </label>
+                <input
+                  type="date"
+                  name="deadline"
+                  value={newGoal.deadline}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#58CC02]"
+                  required
+                />
               </div>
-            </div>
+            )}
             
             <div className="flex space-x-2">
               <button
@@ -173,9 +165,19 @@ const GoalTracker: React.FC = () => {
       {/* 目标列表 */}
       <div className="space-y-4">
         <AnimatePresence>
-          {state.goals.length > 0 ? (
-            state.goals.map(goal => (
-              <GoalCard key={goal.id} goal={goal} />
+          {state.goals && state.goals.length > 0 ? (
+            [...state.goals].reverse().map((goal) => (
+              goal.type === GoalType.CHECKIN ? (
+                <GoalCard 
+                  key={goal.id} 
+                  goal={goal}
+                />
+              ) : (
+                <CountdownGoalCard 
+                  key={goal.id} 
+                  goal={goal}
+                />
+              )
             ))
           ) : (
             <motion.div
@@ -184,10 +186,24 @@ const GoalTracker: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              还没有添加目标，点击上方按钮添加一个吧！
+              还没有添加目标，开始添加一个吧！
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* 添加目标按钮（移到列表底部） */}
+        {!showForm && (
+          <motion.button
+            className="w-full bg-[#58CC02] text-white py-3 rounded-lg font-medium shadow-sm hover:bg-[#46a302] transition-colors"
+            onClick={() => setShowForm(true)}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            添加新目标
+          </motion.button>
+        )}
       </div>
     </div>
   );
